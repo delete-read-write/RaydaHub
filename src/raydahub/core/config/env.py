@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from raydahub.core.config.settings import AppSettings, LoggingSettings
+from raydahub.core.config.settings import AppSettings, FastAPISettings, LoggingSettings
 
 
 class BaseEnvSettings(BaseSettings):
@@ -17,3 +17,7 @@ class AppEnvSettings(BaseEnvSettings, AppSettings):
 
 class LoggingEnvSettings(BaseEnvSettings, LoggingSettings):
     model_config = SettingsConfigDict(env_prefix="LOGGING_")
+
+
+class FastAPIEnvSettings(BaseEnvSettings, FastAPISettings):
+    model_config = SettingsConfigDict(env_prefix="FASTAPI_")
