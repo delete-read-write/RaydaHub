@@ -15,3 +15,71 @@ raydahub = "raydahub:main"
 [build-system]
 requires = ["uv_build>=0.13.5,<0.14.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.1",
+    "ruff>=0.17.4",
+]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "N",
+    "UP",
+    "B",
+    "A",
+    "C4",
+    "SIM",
+    "RET",
+    "PTH",
+    "PIE",
+    "PL",
+    "RUF",
+    "PERF",
+    "TC",
+    "ARG",
+    "ERA",
+    "DTZ",
+    "FURB",
+]
+ignore = [
+    "E501",
+    "PLR0913",
+    "PLR2004",
+    "PLC0415",
+    "RUF001",
+    "RUF002",
+    "RUF003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["PLR", "ARG"]
+
+[tool.ruff.format]
+quote-style = "double"
+docstring-code-format = true
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+files = ["src"]
+warn_unreachable = true
+pretty = true
+show_error_codes = true
+enable_error_code = [
+    "ignore-without-code",
+    "redundant-expr",
+    "truthy-bool",
+    "possibly-undefined",
+    "deprecated",
+    "unused-awaitable",
+]
