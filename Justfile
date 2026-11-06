@@ -1,5 +1,6 @@
 ruff := "uv run ruff"
 mypy := "uv run mypy"
+pre_commit := "uv run pre-commit"
 
 [private]
 default:
@@ -27,6 +28,10 @@ typecheck:
 
 [group('quality')]
 check: lint format-check typecheck
+
+[group('quality')]
+check-ci: check
+    SKIP=ruff-check,ruff-format,mypy {{ pre_commit }} run --all-files --show-diff-on-failure
 
 [group('quality')]
 fix: lint-fix format
