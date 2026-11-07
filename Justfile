@@ -46,8 +46,8 @@ up:
     {{ compose }} up -d
 
 [group('docker')]
-up-public:
-    {{ compose }} -f docker-compose.yaml -f compose/ports.yaml up -d
+up-local:
+    {{ compose }} -f docker-compose.yaml -f compose/local.yaml up -d
 
 [group('docker')]
 down:
