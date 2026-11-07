@@ -1,5 +1,6 @@
 ruff := "uv run ruff"
 mypy := "uv run mypy"
+pytest := "uv run pytest"
 pre_commit := "uv run pre-commit"
 compose := "docker compose"
 
@@ -27,11 +28,19 @@ format-check:
 typecheck:
     {{ mypy }}
 
+[group('pytest')]
+test *args:
+    {{ pytest }} {{ args }}
+
+[group('pytest')]
+test-cov:
+    {{ pytest }} --cov
+
 [group('quality')]
 check: lint format-check typecheck
 
 [group('quality')]
-check-ci: check
+check-ci: check test-cov
     SKIP=ruff-check,ruff-format,mypy {{ pre_commit }} run --all-files --show-diff-on-failure
 
 [group('quality')]
