@@ -1,0 +1,11 @@
+services:
+  raydahub:
+    image: ${RAYDAHUB_IMAGE:-raydahub:latest}
+    container_name: raydahub
+    command: start
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    expose:
+      - "${UVICORN_PORT:-8000}"

@@ -1,0 +1,4 @@
+services:
+  raydahub:
+    ports:
+      - "127.0.0.1:${RAYDAHUB_PORT:-8000}:${UVICORN_PORT:-8000}"
