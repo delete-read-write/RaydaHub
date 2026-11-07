@@ -5,10 +5,16 @@ from raydahub.core.config.env import (
     BaseEnvSettings,
     FastAPIEnvSettings,
     LoggingEnvSettings,
+    SQLAEnvSettings,
 )
 
 if TYPE_CHECKING:
-    from raydahub.core.config.settings import AppSettings, FastAPISettings, LoggingSettings
+    from raydahub.core.config.settings import (
+        AppSettings,
+        FastAPISettings,
+        LoggingSettings,
+        SQLASettings,
+    )
 
 
 def _load_env[E: BaseEnvSettings](env_cls: type[E]) -> E:
@@ -25,3 +31,7 @@ def load_logging_settings() -> LoggingSettings:
 
 def load_fastapi_settings() -> FastAPISettings:
     return _load_env(FastAPIEnvSettings)
+
+
+def load_sqla_settings() -> SQLASettings:
+    return _load_env(SQLAEnvSettings)

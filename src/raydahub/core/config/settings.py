@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 type LoggingLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
@@ -26,3 +26,11 @@ class FastAPISettings(BaseModel):
     docs_url: str | None = "/docs"
     redoc_url: str | None = "/redoc"
     openapi_url: str | None = "/openapi.json"
+
+
+class SQLASettings(BaseModel):
+    echo: bool = False
+    echo_pool: bool = False
+    pool_size: int = 15
+    max_overflow: int = 10
+    connect_timeout_s: int = Field(default=5, gt=0)
