@@ -1,3 +1,6 @@
+from pathlib import Path
+from typing import Final
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from raydahub.core.config.settings import (
@@ -8,11 +11,14 @@ from raydahub.core.config.settings import (
     SQLASettings,
 )
 
+_SECRETS_DIR: Final[Path] = Path("/run/secrets")
+
 
 class BaseEnvSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
+        secrets_dir=_SECRETS_DIR if _SECRETS_DIR.is_dir() else None,
         extra="ignore",
     )
 
