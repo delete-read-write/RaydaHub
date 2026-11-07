@@ -37,14 +37,12 @@ def make_app(
     logging_settings: LoggingSettings | None = None,
     fastapi_settings: FastAPISettings | None = None,
 ) -> FastAPI:
-    if logging_settings is None:
-        logging_settings = load_logging_settings()
+    logging_settings = logging_settings or load_logging_settings()
+
     setup_logging(settings=logging_settings)
 
-    if app_settings is None:
-        app_settings = load_app_settings()
-    if fastapi_settings is None:
-        fastapi_settings = load_fastapi_settings()
+    app_settings = app_settings or load_app_settings()
+    fastapi_settings = fastapi_settings or load_fastapi_settings()
 
     app = FastAPI(
         debug=fastapi_settings.debug,
