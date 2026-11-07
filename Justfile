@@ -1,6 +1,7 @@
 ruff := "uv run ruff"
 mypy := "uv run mypy"
 pre_commit := "uv run pre-commit"
+compose := "docker compose"
 
 [private]
 default:
@@ -35,3 +36,19 @@ check-ci: check
 
 [group('quality')]
 fix: lint-fix format
+
+[group('docker')]
+build:
+    docker build -t raydahub:latest .
+
+[group('docker')]
+up:
+    {{ compose }} up -d
+
+[group('docker')]
+up-public:
+    {{ compose }} -f docker-compose.yaml -f compose/ports.yaml up -d
+
+[group('docker')]
+down:
+    {{ compose }} down
