@@ -5,6 +5,7 @@ from raydahub.core.config.env import (
     BaseEnvSettings,
     FastAPIEnvSettings,
     LoggingEnvSettings,
+    PostgresEnvSettings,
     SQLAEnvSettings,
 )
 
@@ -13,6 +14,7 @@ if TYPE_CHECKING:
         AppSettings,
         FastAPISettings,
         LoggingSettings,
+        PostgresSettings,
         SQLASettings,
     )
 
@@ -35,3 +37,7 @@ def load_fastapi_settings() -> FastAPISettings:
 
 def load_sqla_settings() -> SQLASettings:
     return _load_env(SQLAEnvSettings)
+
+
+def load_postgres_settings() -> PostgresSettings:
+    return _load_env(PostgresEnvSettings)

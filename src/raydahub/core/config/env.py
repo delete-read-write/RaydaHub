@@ -4,6 +4,7 @@ from raydahub.core.config.settings import (
     AppSettings,
     FastAPISettings,
     LoggingSettings,
+    PostgresSettings,
     SQLASettings,
 )
 
@@ -30,3 +31,7 @@ class FastAPIEnvSettings(BaseEnvSettings, FastAPISettings):
 
 class SQLAEnvSettings(BaseEnvSettings, SQLASettings):
     model_config = SettingsConfigDict(env_prefix="SQLA_")
+
+
+class PostgresEnvSettings(BaseEnvSettings, PostgresSettings):
+    model_config = SettingsConfigDict(env_prefix="POSTGRES_")
