@@ -48,3 +48,31 @@ jobs:
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  infra:
+    name: Infra tests
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER: test
+      POSTGRES_DB: test
+      POSTGRES_PORT: 15432
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Set up just
+        uses: extractions/setup-just@v4
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Start test database
+        run: docker compose -p raydahub-test -f docker-compose.yaml -f compose/test.yaml up -d --wait postgres
+
+      - name: Run infra tests
+        run: just test-infra
