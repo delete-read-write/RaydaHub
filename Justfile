@@ -37,6 +37,10 @@ test *args:
 test-cov:
     {{ pytest }} --cov
 
+[group('pytest')]
+test-infra *args:
+    {{ pytest }} --infra {{ args }}
+
 [group('quality')]
 check: lint format-check typecheck
 
