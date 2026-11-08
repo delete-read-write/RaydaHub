@@ -48,6 +48,10 @@ check-ci: check test-cov
 fix: lint-fix format
 
 [group('docker')]
+gen-secrets:
+    python3 scripts/gen_secrets.py
+
+[group('docker')]
 build:
     docker build -t raydahub:latest .
 
