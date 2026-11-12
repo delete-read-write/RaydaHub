@@ -2,6 +2,14 @@ import os
 import sys
 
 import uvicorn
+from alembic import command
+from alembic.config import Config
+
+
+def migrate() -> None:
+    config = Config()
+    config.set_main_option("script_location", "raydahub.core.sqla_database:migrations")
+    command.upgrade(config, "head")
 
 
 def start() -> None:
@@ -22,5 +30,7 @@ if __name__ == "__main__":
         sys.exit("usage: docker-entrypoint.py <command> [args...]")
     if sys.argv[1:] == ["start"]:
         start()
+    elif sys.argv[1:] == ["migrate"]:
+        migrate()
     else:
         os.execvp(sys.argv[1], sys.argv[1:])
