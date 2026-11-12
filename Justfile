@@ -3,6 +3,7 @@ mypy := "uv run mypy"
 pytest := "uv run pytest"
 pre_commit := "uv run pre-commit"
 compose := "docker compose"
+compose_test := "docker compose -p raydahub-test -f docker-compose.yaml -f compose/test.yaml"
 
 [private]
 default:
@@ -36,6 +37,10 @@ test *args:
 test-cov:
     {{ pytest }} --cov
 
+[group('pytest')]
+test-infra *args:
+    {{ pytest }} --infra {{ args }}
+
 [group('quality')]
 check: lint format-check typecheck
 
@@ -45,6 +50,10 @@ check-ci: check test-cov
 
 [group('quality')]
 fix: lint-fix format
+
+[group('docker')]
+gen-secrets:
+    python3 scripts/gen_secrets.py
 
 [group('docker')]
 build:
@@ -57,6 +66,18 @@ up:
 [group('docker')]
 up-local:
     {{ compose }} -f docker-compose.yaml -f compose/local.yaml up -d
+
+[group('docker')]
+up-db:
+    {{ compose }} up -d postgres
+
+[group('docker')]
+up-test:
+    {{ compose_test }} up -d
+
+[group('docker')]
+up-test-db:
+    {{ compose_test }} up -d postgres
 
 [group('docker')]
 down:
