@@ -120,3 +120,19 @@ enable_error_code = [
     "deprecated",
     "unused-awaitable",
 ]
+
+
+[tool.alembic]
+script_location = "raydahub.core.sqla_database:migrations"
+
+[[tool.alembic.post_write_hooks]]
+name = "ruff_format"
+type = "module"
+module = "ruff"
+options = "format REVISION_SCRIPT_FILENAME"
+
+[[tool.alembic.post_write_hooks]]
+name = "ruff_check"
+type = "module"
+module = "ruff"
+options = "check --fix REVISION_SCRIPT_FILENAME"
