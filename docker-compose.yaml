@@ -5,8 +5,8 @@ services:
     command: start
     restart: unless-stopped
     depends_on:
-      postgres:
-        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     env_file:
       - path: .env
         required: false
@@ -14,6 +14,19 @@ services:
       - postgres_password
     expose:
       - "${UVICORN_PORT:-8000}"
+
+  migrate:
+    image: ${RAYDAHUB_IMAGE:-raydahub:latest}
+    command: migrate
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - path: .env
+        required: false
+    secrets:
+      - postgres_password
 
   postgres:
     image: postgres:18-alpine

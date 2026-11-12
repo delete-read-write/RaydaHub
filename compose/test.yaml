@@ -8,6 +8,15 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_DB: test
 
+  migrate:
+    secrets: !reset []
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: test
+
   postgres:
     secrets: !reset []
     environment:

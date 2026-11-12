@@ -4,6 +4,7 @@ pytest := "uv run pytest"
 pre_commit := "uv run pre-commit"
 compose := "docker compose"
 compose_test := "docker compose -p raydahub-test -f docker-compose.yaml -f compose/test.yaml"
+test_db_env := "POSTGRES_HOST=localhost POSTGRES_PORT=15432 POSTGRES_USER=test POSTGRES_PASSWORD=test POSTGRES_DB=test"
 
 [private]
 default:
@@ -82,3 +83,13 @@ up-test-db:
 [group('docker')]
 down:
     {{ compose }} down
+
+[group('alembic')]
+migrate:
+    {{ compose }} run --rm migrate
+
+[group('alembic')]
+migration message:
+    {{ test_db_env }} {{ compose_test }} up -d --wait postgres
+    {{ test_db_env }} uv run alembic upgrade head
+    {{ test_db_env }} uv run alembic revision --autogenerate -m "{{ message }}"
