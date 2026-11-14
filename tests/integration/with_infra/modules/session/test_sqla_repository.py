@@ -155,3 +155,18 @@ async def test_deleting_user_removes_user_sessions(
     sqla_async_session.expunge_all()
 
     assert await repository.get_by_token_hash(session.token_hash) is None
+
+
+async def test_delete_ignores_missing_session(
+    sqla_async_session: AsyncSession,
+    repository: SQLASessionRepository,
+    user: UserEntity,
+) -> None:
+    session = make_session_entity(user_id=user.id)
+    await repository.add(session)
+    await sqla_async_session.flush()
+
+    await repository.delete(make_session_entity(user_id=user.id))
+    await sqla_async_session.flush()
+
+    assert await repository.get_by_token_hash(session.token_hash) is not None

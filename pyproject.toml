@@ -100,7 +100,11 @@ asyncio_default_test_loop_scope = "function"
 [tool.coverage.run]
 source = ["raydahub"]
 branch = true
-omit = ["*/raydahub/bootstrap/*"]
+omit = [
+    "*/raydahub/bootstrap/*",
+    "*/raydahub/core/sqla_database/migrations/env.py",
+    "*/raydahub/core/sqla_database/session_maker.py",
+]
 
 [tool.coverage.report]
 show_missing = true
