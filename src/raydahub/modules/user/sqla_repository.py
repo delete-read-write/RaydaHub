@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import select
 
+from raydahub.core.value_objects import DateTime
 from raydahub.modules.user.entities import UserEntity
 from raydahub.modules.user.sqla_models import UserModel
 from raydahub.modules.user.types_ import UserId
@@ -40,7 +41,7 @@ class SQLAUserRepository:
             email=entity.email.value,
             hashed_password=entity.hashed_password.value,
             is_active=entity.is_active,
-            created_at=entity.created_at,
+            created_at=entity.created_at.value,
         )
 
     @staticmethod
@@ -50,5 +51,5 @@ class SQLAUserRepository:
             email=Email(model.email),
             hashed_password=HashedPassword(model.hashed_password),
             is_active=model.is_active,
-            created_at=model.created_at,
+            created_at=DateTime(model.created_at),
         )

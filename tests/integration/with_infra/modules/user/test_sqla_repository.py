@@ -1,10 +1,10 @@
 import dataclasses
-import datetime as dt
 from typing import TYPE_CHECKING
 
 import pytest
 from sqlalchemy.exc import IntegrityError
 
+from raydahub.core.factory import make_utc_now
 from raydahub.modules.user.entities import UserEntity
 from raydahub.modules.user.factory import make_user_id
 from raydahub.modules.user.sqla_repository import SQLAUserRepository
@@ -20,7 +20,7 @@ def make_user_entity(*, email: str = "user@example.com") -> UserEntity:
         email=Email(email),
         hashed_password=HashedPassword("hash"),
         is_active=True,
-        created_at=dt.datetime.now(dt.UTC),
+        created_at=make_utc_now(),
     )
 
 
