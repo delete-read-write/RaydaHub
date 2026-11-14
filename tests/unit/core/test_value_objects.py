@@ -2,6 +2,7 @@ import datetime as dt
 
 import pytest
 
+from raydahub.core.exception import BusinessTypeError
 from raydahub.core.value_objects import DateTime
 
 
@@ -17,5 +18,5 @@ def test_datetime_converts_value_to_utc() -> None:
 def test_datetime_rejects_naive_value() -> None:
     naive = dt.datetime.now(dt.UTC).replace(tzinfo=None)
 
-    with pytest.raises(ValueError, match="Naive datetime"):
+    with pytest.raises(BusinessTypeError, match="Naive datetime"):
         DateTime(naive)

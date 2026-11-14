@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import ClassVar
 
+from raydahub.core.exception import BusinessTypeError
 from raydahub.core.value_objects import ValueObject
 
 
@@ -18,7 +19,7 @@ class Email(ValueObject[str]):
             or "@" in domain
             or "." not in domain
         ):
-            raise ValueError(f"Invalid email: {self.value!r}")
+            raise BusinessTypeError(f"Invalid email: {self.value!r}")
 
         object.__setattr__(self, "value", normalized)
 

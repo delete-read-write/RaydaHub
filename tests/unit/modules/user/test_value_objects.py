@@ -1,5 +1,6 @@
 import pytest
 
+from raydahub.core.exception import BusinessTypeError
 from raydahub.modules.user.value_objects import Email, HashedPassword
 
 
@@ -39,7 +40,7 @@ def test_email_accepts_max_length() -> None:
     ],
 )
 def test_email_rejects_invalid_value(raw: str) -> None:
-    with pytest.raises(ValueError, match="Invalid email"):
+    with pytest.raises(BusinessTypeError, match="Invalid email"):
         Email(raw)
 
 
