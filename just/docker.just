@@ -1,6 +1,9 @@
 [group('docker')]
 gen-secrets:
-    python3 scripts/gen_secrets.py
+    mkdir -p secrets
+    [ -f secrets/postgres_password ] || python3 -c 'import secrets; print(secrets.token_urlsafe(32), end="")' > secrets/postgres_password
+    chmod 755 secrets
+    chmod 644 secrets/postgres_password
 
 [group('docker')]
 docker-build:
