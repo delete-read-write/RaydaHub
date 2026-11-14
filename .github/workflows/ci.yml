@@ -9,9 +9,16 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  COMPOSE_PROJECT_NAME: raydahub-test
+  COMPOSE_FILE: docker-compose.yaml:compose/test.yaml
+  POSTGRES_USER: test
+  POSTGRES_DB: test
+  POSTGRES_PORT: 15432
+
 jobs:
-  check:
-    name: Check
+  code:
+    name: Code check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,8 +39,10 @@ jobs:
         run: just check-ci
 
   docker:
-    name: Docker build
+    name: Docker
     runs-on: ubuntu-latest
+    env:
+      RAYDAHUB_IMAGE: raydahub:ci
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -45,17 +54,31 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
-          push: false
+          load: true
+          tags: ${{ env.RAYDAHUB_IMAGE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  infra:
-    name: Infra tests
+      - name: Start stack
+        run: docker compose up -d --wait
+
+      - name: Check app responds
+        run: |
+          for attempt in $(seq 30); do
+            docker compose exec -T raydahub python -c \
+              "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/openapi.json')" \
+              && exit 0
+            sleep 1
+          done
+          exit 1
+
+      - name: Show logs
+        if: failure()
+        run: docker compose logs
+
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
-    env:
-      POSTGRES_USER: test
-      POSTGRES_DB: test
-      POSTGRES_PORT: 15432
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -72,7 +95,7 @@ jobs:
         run: uv sync --locked
 
       - name: Start test database
-        run: docker compose -p raydahub-test -f docker-compose.yaml -f compose/test.yaml up -d --wait postgres
+        run: docker compose up -d --wait postgres
 
-      - name: Run infra tests
-        run: just test-infra
+      - name: Run tests with coverage
+        run: just test-cov

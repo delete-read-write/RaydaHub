@@ -12,5 +12,5 @@ default:
     @just --list
 
 [group('quality')]
-check-ci: code-check test-cov
+check-ci: code-check
     SKIP=ruff-check,ruff-format,mypy {{ pre_commit }} run --all-files --show-diff-on-failure
