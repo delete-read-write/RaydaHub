@@ -1,6 +1,8 @@
 import datetime as dt
 from typing import TYPE_CHECKING
 
+from raydahub.core.factory import make_utc_now
+from raydahub.core.value_objects import DateTime
 from raydahub.modules.session.entities import SessionEntity
 from raydahub.modules.session.factory import make_session_id, make_session_token
 from raydahub.modules.user.factory import make_user_id
@@ -10,13 +12,13 @@ if TYPE_CHECKING:
 
 
 def make_session_entity(*, session_id: SessionId) -> SessionEntity:
-    now = dt.datetime.now(dt.UTC)
+    now = make_utc_now()
     return SessionEntity(
         id=session_id,
         user_id=make_user_id(),
         token_hash=make_session_token().hash(),
         created_at=now,
-        expires_at=now + dt.timedelta(days=30),
+        expires_at=DateTime(now.value + dt.timedelta(days=30)),
     )
 
 

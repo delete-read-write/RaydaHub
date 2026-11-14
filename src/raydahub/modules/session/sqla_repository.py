@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import delete, select
 
+from raydahub.core.value_objects import DateTime
 from raydahub.modules.session.entities import SessionEntity
 from raydahub.modules.session.sqla_models import SessionModel
 from raydahub.modules.session.types_ import SessionId
@@ -41,8 +42,8 @@ class SQLASessionRepository:
             id=entity.id,
             user_id=entity.user_id,
             token_hash=entity.token_hash.value,
-            created_at=entity.created_at,
-            expires_at=entity.expires_at,
+            created_at=entity.created_at.value,
+            expires_at=entity.expires_at.value,
         )
 
     @staticmethod
@@ -51,6 +52,6 @@ class SQLASessionRepository:
             id=SessionId(model.id),
             user_id=UserId(model.user_id),
             token_hash=SessionTokenHash(model.token_hash),
-            created_at=model.created_at,
-            expires_at=model.expires_at,
+            created_at=DateTime(model.created_at),
+            expires_at=DateTime(model.expires_at),
         )

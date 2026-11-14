@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING
 import pytest
 from sqlalchemy.exc import IntegrityError
 
+from raydahub.core.factory import make_utc_now
+from raydahub.core.value_objects import DateTime
 from raydahub.modules.session.entities import SessionEntity
 from raydahub.modules.session.factory import make_session_id, make_session_token
 from raydahub.modules.session.sqla_repository import SQLASessionRepository
@@ -25,13 +27,13 @@ def make_session_entity(
     user_id: UserId,
     token_hash: SessionTokenHash | None = None,
 ) -> SessionEntity:
-    now = dt.datetime.now(dt.UTC)
+    now = make_utc_now()
     return SessionEntity(
         id=make_session_id(),
         user_id=user_id,
         token_hash=token_hash or make_session_token().hash(),
         created_at=now,
-        expires_at=now + dt.timedelta(days=30),
+        expires_at=DateTime(now.value + dt.timedelta(days=30)),
     )
 
 
@@ -55,7 +57,7 @@ async def user(
         email=Email("user@example.com"),
         hashed_password=HashedPassword("hash"),
         is_active=True,
-        created_at=dt.datetime.now(dt.UTC),
+        created_at=make_utc_now(),
     )
     await user_repository.add(user)
     await sqla_async_session.flush()

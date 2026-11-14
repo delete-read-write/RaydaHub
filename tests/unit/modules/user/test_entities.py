@@ -1,6 +1,6 @@
-import datetime as dt
 from typing import TYPE_CHECKING
 
+from raydahub.core.factory import make_utc_now
 from raydahub.modules.user.entities import UserEntity
 from raydahub.modules.user.factory import make_user_id
 from raydahub.modules.user.value_objects import Email, HashedPassword
@@ -15,7 +15,7 @@ def make_user_entity(*, user_id: UserId, email: str = "user@example.com") -> Use
         email=Email(email),
         hashed_password=HashedPassword("hash"),
         is_active=True,
-        created_at=dt.datetime.now(dt.UTC),
+        created_at=make_utc_now(),
     )
 
 

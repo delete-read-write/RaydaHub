@@ -2,8 +2,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, override
 
 if TYPE_CHECKING:
-    import datetime as dt
-
+    from raydahub.core.value_objects import DateTime
     from raydahub.modules.session.types_ import SessionId
     from raydahub.modules.session.value_objects import SessionTokenHash
     from raydahub.modules.user.types_ import UserId
@@ -14,8 +13,8 @@ class SessionEntity:
     id: SessionId
     user_id: UserId
     token_hash: SessionTokenHash
-    created_at: dt.datetime
-    expires_at: dt.datetime
+    created_at: DateTime
+    expires_at: DateTime
 
     @override
     def __eq__(self, other: object) -> bool:

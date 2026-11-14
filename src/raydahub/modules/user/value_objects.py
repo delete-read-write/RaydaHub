@@ -18,8 +18,7 @@ class Email(ValueObject[str]):
             or "@" in domain
             or "." not in domain
         ):
-            msg = f"Invalid email: {self.value!r}"
-            raise ValueError(msg)
+            raise ValueError(f"Invalid email: {self.value!r}")
 
         object.__setattr__(self, "value", normalized)
 

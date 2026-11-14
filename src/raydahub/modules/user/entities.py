@@ -2,8 +2,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, override
 
 if TYPE_CHECKING:
-    import datetime as dt
-
+    from raydahub.core.value_objects import DateTime
     from raydahub.modules.user.types_ import UserId
     from raydahub.modules.user.value_objects import Email, HashedPassword
 
@@ -14,7 +13,7 @@ class UserEntity:
     email: Email
     hashed_password: HashedPassword
     is_active: bool
-    created_at: dt.datetime
+    created_at: DateTime
 
     @override
     def __eq__(self, other: object) -> bool:
