@@ -6,7 +6,7 @@ test *args:
 
 [group('pytest')]
 test-cov:
-    {{ pytest }} --cov
+    {{ pytest }} --all --cov
 
 [group('pytest')]
 test-infra *args:
