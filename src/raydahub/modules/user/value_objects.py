@@ -1,12 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar
+
+from raydahub.core.value_objects import ValueObject
 
 
 @dataclass(frozen=True, slots=True)
-class Email:
+class Email(ValueObject[str]):
     EMAIL_MAX_LENGTH: ClassVar[int] = 320
-
-    value: str
 
     def __post_init__(self) -> None:
         normalized = self.value.strip().lower()
@@ -24,6 +24,6 @@ class Email:
         object.__setattr__(self, "value", normalized)
 
 
-@dataclass(frozen=True, slots=True, repr=False)
-class HashedPassword:
-    value: str
+@dataclass(frozen=True, slots=True)
+class HashedPassword(ValueObject[str]):
+    value: str = field(repr=False)
