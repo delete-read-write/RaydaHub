@@ -10,24 +10,24 @@ test_db_env := "POSTGRES_HOST=localhost POSTGRES_PORT=15432 POSTGRES_USER=test P
 default:
     @just --list
 
-[group('ruff')]
-lint:
+[group('code')]
+code-lint:
     {{ ruff }} check .
 
-[group('ruff')]
-lint-fix:
+[group('code')]
+code-lint-fix:
     {{ ruff }} check --fix .
 
-[group('ruff')]
-format:
+[group('code')]
+code-format:
     {{ ruff }} format .
 
-[group('ruff')]
-format-check:
+[group('code')]
+code-format-check:
     {{ ruff }} format --check --diff .
 
-[group('mypy')]
-typecheck:
+[group('code')]
+code-typecheck:
     {{ mypy }}
 
 [group('pytest')]
@@ -42,46 +42,46 @@ test-cov:
 test-infra *args:
     {{ pytest }} --infra {{ args }}
 
-[group('quality')]
-check: lint format-check typecheck
+[group('code')]
+code-check: code-lint code-format-check code-typecheck
 
 [group('quality')]
-check-ci: check test-cov
+check-ci: code-check test-cov
     SKIP=ruff-check,ruff-format,mypy {{ pre_commit }} run --all-files --show-diff-on-failure
 
-[group('quality')]
-fix: lint-fix format
+[group('code')]
+code-fix: code-lint-fix code-format
 
 [group('docker')]
 gen-secrets:
     python3 scripts/gen_secrets.py
 
 [group('docker')]
-build:
+docker-build:
     docker build -t raydahub:latest .
 
 [group('docker')]
-up:
+docker-up:
     {{ compose }} up -d
 
 [group('docker')]
-up-local:
+docker-up-local:
     {{ compose }} -f docker-compose.yaml -f compose/local.yaml up -d
 
 [group('docker')]
-up-db:
+docker-up-db:
     {{ compose }} up -d postgres
 
 [group('docker')]
-up-test:
+docker-up-test:
     {{ compose_test }} up -d
 
 [group('docker')]
-up-test-db:
+docker-up-test-db:
     {{ compose_test }} up -d postgres
 
 [group('docker')]
-down:
+docker-down:
     {{ compose }} down
 
 [group('alembic')]
