@@ -5,6 +5,7 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import create_async_engine
 
+import raydahub.modules.session.sqla_models
 import raydahub.modules.user.sqla_models  # noqa: F401
 from raydahub.bootstrap.setup import setup_logging
 from raydahub.core.config.loader import load_logging_settings, load_postgres_settings
